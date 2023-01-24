@@ -16,6 +16,7 @@ def main():
     for row in rows:
         name = 'Vaillant'
         model = ''
+        power = ''
         titles = get_title(row)  # getting every full title so I can extract models from it
         for title in titles:  # for each title
             title = title.find('span').text  # get text
@@ -25,6 +26,17 @@ def main():
             for t in split_title:  # for every word check
                 if contains_number(t):
                     model = t  # if contains number that's model name
+                    match model:
+                        case '35/5':
+                            power = '4'
+                        case '55/5':
+                            power = '6'
+                        case '75/5':
+                            power = '8'
+                        case '105/5':
+                            power = '10'
+                        case '125/5':
+                            power = '12'
                     if model == '190' or model == '-190':  # if first finds tank volume, continue search
                         if contains_number(t):
                             model = t
@@ -39,11 +51,12 @@ def main():
                 price = span
                 for p in price:
                     price = p
+#                   price = price.replace(',', '')  # converting string to float
 
         seller = 'Gas_Lider'
-        hps.append([name, model, price, seller])  # we need to pass list to append 'couse it accepts only one argument
+        hps.append([name, model, power, price, seller])  # we need to pass list to append 'couse it accepts only one argument
 
-    df = pd.DataFrame(hps, columns=['Brand', 'Model', 'Price', 'Seller'])
+    df = pd.DataFrame(hps, columns=['Brand', 'Model', 'Power', 'Price', 'Seller'])
     df.to_csv('gaslider.csv')
 
 
